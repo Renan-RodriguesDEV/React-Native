@@ -14,3 +14,5 @@
 
 - run app
   `npm start`
+
+# Autor: Renan
