@@ -1,18 +1,27 @@
 # Guide build project
 
-- instaling expo
+- **installing expo-cli**
 
   `npm install --global expo-cli`
 
-- start project expo
+  **or**
+
+  `npm install -g expo-cli`
+
+- **Start project expo**
 
   `expo init <nome-projeto>`
 
-- Template
+  **or**
 
-  esolha o template*blank*
+  `npx create-expo-app <nome-projeto>`
 
-- run app
+- **Template**
+
+  choice the **blank** template
+
+- **Run app**
+
   `npm start`
 
-# Autor: Renan
+# Author: **renanrodrigues7110@gmail.com**
