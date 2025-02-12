@@ -12,6 +12,7 @@
   "dependencies": {
     "expo": "~52.0.32",
     "expo-status-bar": "~2.0.1",
+    "my-app": "file:",
     "react": "18.3.1",
     "react-native": "0.76.7"
   },
