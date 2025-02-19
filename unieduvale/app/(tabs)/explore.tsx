@@ -37,6 +37,20 @@ export default function TabTwoScreen() {
           <ThemedText type="link">python.org</ThemedText>
         </ExternalLink>
       </Collapsible>
+      <Collapsible title="comandos basicos">
+        <ThemedText>
+          Algumas keywords essenciais{' '}
+          <ThemedText type="defaultSemiBold">for i in range(started,until,jump)</ThemedText> and{' '}
+          <ThemedText type="defaultSemiBold">if, else elif</ThemedText>
+        </ThemedText>
+        <ThemedText>
+          Veja as diversas blibiotecas em <ThemedText type="defaultSemiBold">python</ThemedText>{' '}
+         no pypi
+        </ThemedText>
+        <ExternalLink href="https://pypi.org">
+          <ThemedText type="link">pypi.org</ThemedText>
+        </ExternalLink>
+      </Collapsible>
     </ParallaxScrollView>
   );
 }

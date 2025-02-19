@@ -15,8 +15,8 @@ export default function HomeScreen() {
         source={{ uri: 'https://www.python.org/static/community_logos/python-logo-master-v3-TM.png' }} 
         style={{ 
         alignSelf: 'center', 
-        width: 600, 
-        height: 220, 
+        width: 300, 
+        height: 300, 
         resizeMode: 'contain' 
         }} 
       />
@@ -28,9 +28,9 @@ export default function HomeScreen() {
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-      <ThemedText type="subtitle">Let's get started!</ThemedText>
+      <ThemedText type="subtitle">get started in python!</ThemedText>
       <ThemedText>
-        Bem vindo ao <ThemedText type="defaultSemiBold">Tutorial de Python</ThemedText>
+        Bem vindo ao <ThemedText type="defaultSemiBold">Python for beginners</ThemedText>
       </ThemedText>
       </ThemedView>
 
@@ -45,14 +45,14 @@ export default function HomeScreen() {
 
       <ThemedText type="subtitle">Passo 2:</ThemedText>
       <ThemedText>
-        <ThemedText type="defaultSemiBold">Instale as bibliotecas: </ThemedText>
-        pip install pymysql pandas openpyxl
+        <ThemedText type="defaultSemiBold">Crie um arquivo com nome de main.py: </ThemedText>
+        source new folder
       </ThemedText>
 
       <ThemedText type="subtitle">Passo 3:</ThemedText>
       <ThemedText>
-        <ThemedText type="defaultSemiBold">Crie uma pasta para o projeto: </ThemedText>
-        mkdir src && cd src && code .
+        <ThemedText type="defaultSemiBold">ative o venv: </ThemedText>
+        souce venv/bin/activate
       </ThemedText>
 
       <ThemedText type="subtitle">Passo 4:</ThemedText>
