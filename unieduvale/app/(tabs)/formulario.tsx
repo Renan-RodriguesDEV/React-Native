@@ -22,6 +22,7 @@ export default function App(){
     };
     return(
         <View style={styles.container}>
+            
             <Image source={{uri: 'https://www.python.org/static/community_logos/python-logo-master-v3-TM.png'}} style={{flex:1,width:500,height:300,resizeMode:'contain'}}/>
             <Text style={styles.title}></Text>
             <TextInput className='cardNumber' style={styles.input} placeholder="enter the number on the front/back of your card" value={cardNumber} 

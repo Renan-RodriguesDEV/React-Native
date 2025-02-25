@@ -20,6 +20,7 @@
     "@react-navigation/native": "^7.0.14",
     "expo": "~52.0.32",
     "expo-blur": "~14.0.3",
+    "expo-camera": "~16.0.16",
     "expo-constants": "~17.0.5",
     "expo-font": "~13.0.3",
     "expo-haptics": "~14.0.1",
@@ -39,8 +40,7 @@
     "react-native-screens": "~4.4.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "unieduvale": "file:",
-    "expo-camera": "~16.0.16"
+    "unieduvale": "file:"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
