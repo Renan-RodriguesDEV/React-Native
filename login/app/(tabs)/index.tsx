@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,23 +6,34 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
+  Platform,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 
 export default function App() {
   const [user, setUser] = useState("");
   const [passwd, setPasswd] = useState("");
-
+  const router = useRouter();
   async function saveUser() {
     await AsyncStorage.setItem("user", user);
     await AsyncStorage.setItem("passwd", passwd);
   }
 
-  function checkUser() {
+  async function checkUser() {
     if (user === "root" && passwd === "admin") {
       console.log("Sucesso");
-      Alert.alert("Sucesso", "Dados salvos");
-      saveUser();
+      await saveUser();
+      if (Platform.OS === "web") {
+        router.push("/(tabs)/userscreen");
+      } else {
+        Alert.alert("Sucesso", "Dados salvos", [
+          {
+            text: "OK",
+            onPress: () => router.push("/(tabs)/userscreen"),
+          },
+        ]);
+      }
     } else {
       Alert.alert("Erro", "Dados invalidos");
       console.log("Erro");
