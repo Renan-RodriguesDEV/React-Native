@@ -28,6 +28,6 @@
 
 - **AsyncStorage**
 
-`npm install @react-native-async-storage/async-storage`
+  `npm install @react-native-async-storage/async-storage`
 
 # Author: **renanrodrigues7110@gmail.com**

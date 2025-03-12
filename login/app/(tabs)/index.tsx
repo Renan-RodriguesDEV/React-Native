@@ -15,15 +15,20 @@ export default function App() {
   const [user, setUser] = useState("");
   const [passwd, setPasswd] = useState("");
   const router = useRouter();
+
+  // Salva os dados do usuário no AsyncStorage
   async function saveUser() {
     await AsyncStorage.setItem("user", user);
     await AsyncStorage.setItem("passwd", passwd);
   }
 
+  // Checa se os dados do usuário estão corretos
   async function checkUser() {
     if (user === "root" && passwd === "admin") {
       console.log("Sucesso");
       await saveUser();
+
+      // Redireciona para a tela de usuário e verifica a plataforma
       if (Platform.OS === "web") {
         router.push("/(tabs)/userscreen");
       } else {
@@ -35,7 +40,9 @@ export default function App() {
         ]);
       }
     } else {
-      Alert.alert("Erro", "Dados invalidos");
+      Platform.OS !== "web"
+        ? Alert.alert("Erro", "Dados invalidos")
+        : alert("Erro!! dados invalidos");
       console.log("Erro");
     }
   }
