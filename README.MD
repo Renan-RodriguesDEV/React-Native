@@ -16,6 +16,10 @@
 
   `npx create-expo-app <nome-projeto>`
 
+  **or**
+
+  `npx create-expo-app@latest <nome-projeto>`
+
 - **Template**
 
   choice the **blank** template
