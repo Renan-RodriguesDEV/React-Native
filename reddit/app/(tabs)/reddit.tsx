@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import Footer from "@/components/footer";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function App() {
   const [nome, setNome] = useState("");
@@ -34,25 +36,6 @@ export default function App() {
     if (nomesSalvos) setPosts(JSON.parse(nomesSalvos));
   }
 
-  async function salvarNome() {
-    // Validação: deve ter título
-    if (post.titulo.trim() === "") return;
-
-    if (editIndex !== null) {
-      const novaLista = [...posts];
-      novaLista[editIndex] = post;
-      setPosts(novaLista);
-      await AsyncStorage.setItem("posts", JSON.stringify(novaLista));
-      setEditIndex(null);
-    } else {
-      const novaLista = [...posts, post];
-      setPosts(novaLista);
-      await AsyncStorage.setItem("posts", JSON.stringify(novaLista));
-    }
-    // Reseta o objeto post
-    setPost({ titulo: "", content: "" });
-  }
-
   async function removePostByIndex(index: number) {
     const novaLista = posts.filter((_, i) => i !== index);
     setPosts(novaLista);
@@ -60,8 +43,12 @@ export default function App() {
   }
 
   function editPost(index: number) {
-    setPost(posts[index]);
-    setEditIndex(index);
+    const selectedPost = posts[index];
+    router.push(
+      `/(tabs)/formPost?type=edit&index=${index}&title=${encodeURIComponent(
+        selectedPost.titulo
+      )}&content=${encodeURIComponent(selectedPost.content)}`
+    );
   }
 
   async function cleanPost() {
@@ -83,28 +70,43 @@ export default function App() {
   }
 
   function redrectToPost() {
-    router.push("/(tabs)/postForm");
+    router.push("/(tabs)/formPost");
   }
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#FF4500" />
+      <StatusBar barStyle="light-content" backgroundColor="#333333" />
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Reddit</Text>
-        <Text style={styles.headerTitle}>r/{nome}</Text>
+        <View style={styles.headerLeft}>
+          <Text style={styles.headerTitle}>Reddit</Text>
+          <Text style={styles.subHeaderTitle}>r/{nome}</Text>
+        </View>
+        <View style={styles.headerRight}>
+          <TouchableOpacity onPress={cleanPost} style={styles.headerButton}>
+            <MaterialCommunityIcons name="broom" size={30} color="red" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={redirectToHome}
+            style={styles.headerButton}
+          >
+            <Ionicons name="exit-outline" size={30} color="green" />
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.searchContainer}>
-        <Button title="+New Post" onPress={redrectToPost} />
+        <Button title="+New Post" onPress={redrectToPost} color="#FF4500" />
       </View>
       <View style={styles.content}>
-        {/* Input para consulta */}
-        <TextInput
-          style={styles.searchBar}
-          placeholder="Query..."
-          value={consulta}
-          onChangeText={setConsulta}
-        />
-        <Button title="Query" color="#FF4500" onPress={() => {}} />
+        <View style={styles.searchBarContainer}>
+          <Ionicons name="search-outline" size={20} color="#ccc" />
+          <TextInput
+            style={styles.searchBar}
+            placeholder="Query..."
+            placeholderTextColor="#ccc"
+            value={consulta}
+            onChangeText={setConsulta}
+          />
+        </View>
         <FlatList
           data={filterPost()}
           keyExtractor={(_, index) => index.toString()}
@@ -117,64 +119,87 @@ export default function App() {
                   onPress={() => editPost(index)}
                   style={styles.editButton}
                 >
-                  <Text style={styles.buttonText}>Edit</Text>
+                  <Ionicons name="pencil-outline" size={20} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => removePostByIndex(index)}
                   style={styles.deleteButton}
                 >
-                  <Text style={styles.buttonText}>Remove</Text>
+                  <Ionicons name="trash-outline" size={20} color="white" />
                 </TouchableOpacity>
               </View>
             </View>
           )}
         />
-        <View style={styles.clearButtonContainer}>
-          <Button title="Limpar Lista" color="#A52A2A" onPress={cleanPost} />
-        </View>
-        <View style={styles.logout}>
-          <Button title="Logout" color="#A52A2A" onPress={redirectToHome} />
-        </View>
       </View>
+      <Footer />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  logout: {},
   container: {
     flex: 1,
-    backgroundColor: "#f6f7f8",
+    backgroundColor: "#121212",
+  },
+  searchContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "#FF4500",
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+  searchBarContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#333333",
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  searchBar: {
+    flex: 1,
+    backgroundColor: "transparent",
+    fontSize: 16,
+    color: "white",
+    paddingVertical: 8,
+    paddingHorizontal: 10,
   },
   header: {
-    backgroundColor: "#FF4500",
+    backgroundColor: "#333333",
     paddingVertical: 20,
+    paddingHorizontal: 15,
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+  },
+  headerLeft: {
+    flexDirection: "column",
+  },
+  headerRight: {
+    flexDirection: "row",
   },
   headerTitle: {
     color: "white",
     fontSize: 26,
     fontWeight: "bold",
   },
-  content: {
-    flex: 1,
-    padding: 20,
+  subHeaderTitle: {
+    color: "white",
+    fontSize: 16,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    textAlign: "center",
+  headerButton: {
+    marginLeft: 10,
+    padding: 5,
   },
-  searchInput: {
-    marginTop: 15,
+  headerButtonText: {
+    color: "white",
+    fontSize: 14,
   },
   itemContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#1e1e1e",
     borderRadius: 5,
     padding: 10,
     marginVertical: 5,
@@ -184,10 +209,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
+    color: "white",
   },
   itemContent: {
     fontSize: 16,
     marginBottom: 10,
+    color: "white",
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -195,36 +222,13 @@ const styles = StyleSheet.create({
   },
   editButton: {
     backgroundColor: "#FF8C00",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    padding: 5,
     borderRadius: 5,
     marginRight: 5,
   },
   deleteButton: {
     backgroundColor: "#A52A2A",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    padding: 5,
     borderRadius: 5,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  clearButtonContainer: {
-    marginTop: 15,
-  },
-  searchContainer: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: "#FF4500",
-  },
-  searchBar: {
-    backgroundColor: "white",
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#ccc",
   },
 });

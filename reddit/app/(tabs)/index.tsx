@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import Footer from "@/components/footer";
 
 export default function App() {
   const [user, setUser] = useState("");
@@ -46,57 +47,86 @@ export default function App() {
       console.log("Erro");
     }
   }
-
   return (
     <View style={styles.container}>
-      <Text style={styles.texto}>Username:</Text>
-      <TextInput onChangeText={setUser} value={user} style={styles.input} />
-      <Text style={styles.texto}>Password:</Text>
-      <TextInput onChangeText={setPasswd} value={passwd} style={styles.input} />
-      <TouchableOpacity style={styles.button} onPress={checkUser}>
-        <Text>Sign</Text>
-      </TouchableOpacity>
+      <View style={styles.loginContainer}>
+        <Text style={styles.title}>Bem vindo ao Reddit</Text>
+        <Text style={styles.texto}>Username:</Text>
+        <TextInput
+          onChangeText={setUser}
+          value={user}
+          style={styles.input}
+          placeholder="Digite seu usuário"
+          placeholderTextColor="#888"
+        />
+        <Text style={styles.texto}>Password:</Text>
+        <TextInput
+          onChangeText={setPasswd}
+          value={passwd}
+          style={styles.input}
+          placeholder="Digite sua senha"
+          placeholderTextColor="#888"
+          secureTextEntry
+        />
+        <TouchableOpacity style={styles.button} onPress={checkUser}>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
+      </View>
+      <Footer />
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#121212",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
     padding: 20,
   },
-  titulo: {
+  loginContainer: {
+    width: "100%",
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: "#1e1e1e",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "#fff",
+    alignSelf: "center",
   },
   texto: {
     fontSize: 18,
     marginBottom: 10,
-    alignSelf: "flex-start",
+    color: "#fff",
   },
   input: {
     width: "100%",
-    height: 40,
-    borderColor: "gray",
+    height: 44,
+    borderColor: "#333",
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
     borderRadius: 5,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
+    color: "#fff",
+    backgroundColor: "#2a2a2a",
   },
   button: {
-    backgroundColor: "#007bff",
-    padding: 12,
+    backgroundColor: "#6200EE",
+    paddingVertical: 12,
     borderRadius: 5,
     alignItems: "center",
-    width: 100,
-    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
