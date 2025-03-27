@@ -3,11 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   FlatList,
   StyleSheet,
   TouchableOpacity,
   StatusBar,
+  Pressable,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
@@ -16,12 +16,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function App() {
   const [nome, setNome] = useState("");
-  const [post, setPost] = useState<{ titulo: string; content: string }>({
-    titulo: "",
-    content: "",
-  });
-  const [posts, setPosts] = useState<{ titulo: string; content: string }[]>([]);
-  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [posts, setPosts] = useState([{ title: "", content: "" }]);
   const [consulta, setConsulta] = useState("");
   const router = useRouter();
 
@@ -46,7 +41,7 @@ export default function App() {
     const selectedPost = posts[index];
     router.push(
       `/(tabs)/formPost?type=edit&index=${index}&title=${encodeURIComponent(
-        selectedPost.titulo
+        selectedPost.title
       )}&content=${encodeURIComponent(selectedPost.content)}`
     );
   }
@@ -61,7 +56,7 @@ export default function App() {
       return posts;
     }
     return posts.filter((postObj) =>
-      postObj.titulo.toLowerCase().includes(consulta.toLowerCase())
+      postObj.title.toLowerCase().includes(consulta.toLowerCase())
     );
   }
 
@@ -71,6 +66,10 @@ export default function App() {
 
   function redrectToPost() {
     router.push("/(tabs)/formPost");
+  }
+
+  function redrectToSavedPosts() {
+    router.push("/(tabs)/viewPosts");
   }
 
   return (
@@ -89,13 +88,32 @@ export default function App() {
             onPress={redirectToHome}
             style={styles.headerButton}
           >
-            <Ionicons name="exit-outline" size={30} color="green" />
+            <Ionicons name="exit-outline" size={30} color="orange" />
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.searchContainer}>
-        <Button title="+New Post" onPress={redrectToPost} color="#FF4500" />
+
+      <View style={styles.buttonsRow}>
+        <Pressable
+          onPress={redrectToPost}
+          style={({ hovered }) => [
+            styles.customButton,
+            hovered && styles.customButtonHover,
+          ]}
+        >
+          <Text style={styles.customButtonText}>+ New Post</Text>
+        </Pressable>
+        <Pressable
+          onPress={redrectToSavedPosts}
+          style={({ hovered }) => [
+            styles.customButton,
+            hovered && styles.customButtonHover,
+          ]}
+        >
+          <Text style={styles.customButtonText}>See Posts</Text>
+        </Pressable>
       </View>
+
       <View style={styles.content}>
         <View style={styles.searchBarContainer}>
           <Ionicons name="search-outline" size={20} color="#ccc" />
@@ -112,7 +130,7 @@ export default function App() {
           keyExtractor={(_, index) => index.toString()}
           renderItem={({ item, index }) => (
             <View style={styles.itemContainer}>
-              <Text style={styles.itemTitle}>{item.titulo}</Text>
+              <Text style={styles.itemTitle}>{item.title}</Text>
               <Text style={styles.itemContent}>{item.content}</Text>
               <View style={styles.buttonsContainer}>
                 <TouchableOpacity
@@ -141,11 +159,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#121212",
-  },
-  searchContainer: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: "#FF4500",
   },
   content: {
     flex: 1,
@@ -194,10 +207,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     padding: 5,
   },
-  headerButtonText: {
-    color: "white",
-    fontSize: 14,
-  },
   itemContainer: {
     backgroundColor: "#1e1e1e",
     borderRadius: 5,
@@ -230,5 +239,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#A52A2A",
     padding: 5,
     borderRadius: 5,
+  },
+  buttonsRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 10,
+  },
+  customButton: {
+    backgroundColor: "#FF4500",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+  },
+  customButtonHover: {
+    backgroundColor: "#e03e00",
+  },
+  customButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    textAlign: "center",
   },
 });

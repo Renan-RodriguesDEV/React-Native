@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from "@/components/footer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const PostForm: React.FC = () => {
+export default function App() {
   const router = useRouter();
   const searchParams = useLocalSearchParams();
   const isEdit = searchParams.type === "edit";
@@ -34,9 +34,9 @@ const PostForm: React.FC = () => {
       const posts = storedPosts ? JSON.parse(storedPosts) : [];
 
       if (isEdit && editIndex !== null) {
-        posts[editIndex] = { titulo: title, content: content };
+        posts[editIndex] = { title: title, content: content };
       } else {
-        posts.push({ titulo: title, content: content });
+        posts.push({ title: title, content: content });
       }
 
       await AsyncStorage.setItem("posts", JSON.stringify(posts));
@@ -46,23 +46,18 @@ const PostForm: React.FC = () => {
     }
   };
 
-  const handleGoHome = () => {
+  const redirectToHome = () => {
     router.replace("/(tabs)/reddit");
   };
 
   return (
-    <>
-      <TouchableOpacity style={styles.homeButton} onPress={handleGoHome}>
-        <MaterialCommunityIcons
-          name="home-outline"
-          size={30}
-          color="orange"
-          style={styles.homeButton}
-        />
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.homeButton} onPress={redirectToHome}>
+        <MaterialCommunityIcons name="home-outline" size={30} color="orange" />
       </TouchableOpacity>
       <View style={styles.postForm}>
         <Text style={styles.heading}>
-          {isEdit ? "Editar Post" : "Criar Novo Post"}
+          {isEdit ? "Editar Post" : "Crie uma Postagem"}
         </Text>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Título:</Text>
@@ -90,36 +85,29 @@ const PostForm: React.FC = () => {
         </View>
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>
-            {isEdit ? "Salvar Alterações" : "Criar Post"}
+            {isEdit ? "Salvar Alterações" : "Postar"}
           </Text>
         </TouchableOpacity>
       </View>
       <Footer />
-    </>
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   homeButton: {
-    backgroundColor: "#444",
+    backgroundColor: "#333333",
     padding: 10,
     borderRadius: 30,
     position: "absolute",
     top: 10,
     right: 10,
   },
-  homeIcon: {
-    color: "orange",
-  },
-  homeButtonText: {
-    color: "#fff",
-    fontSize: 16,
-  },
   postForm: {
     maxWidth: 600,
     alignSelf: "center",
     padding: 20,
-    backgroundColor: "#222",
+    backgroundColor: "#1e1e1e",
     borderRadius: 8,
     width: "100%",
     marginTop: 60,
@@ -161,6 +149,9 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
   },
+  container: {
+    flex: 1,
+    backgroundColor: "#000",
+    padding: 10,
+  },
 });
-
-export default PostForm;

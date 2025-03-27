@@ -25,7 +25,10 @@ export default function App() {
 
   // Checa se os dados do usuário estão corretos
   async function checkUser() {
-    if (user === "root" && passwd === "admin") {
+    if (
+      ["root", "yan", "renan", "joão"].indexOf(user.toLowerCase()) >= 0 &&
+      passwd === "admin"
+    ) {
       console.log("Sucesso");
       await saveUser();
 
@@ -33,7 +36,7 @@ export default function App() {
       if (Platform.OS === "web") {
         router.push("/(tabs)/reddit");
       } else {
-        Alert.alert("Sucesso", "Dados salvos", [
+        Alert.alert("Sucesso", "Bem vindo a Reddit", [
           {
             text: "OK",
             onPress: () => router.push("/(tabs)/reddit"),
@@ -42,9 +45,8 @@ export default function App() {
       }
     } else {
       Platform.OS !== "web"
-        ? Alert.alert("Erro", "Dados invalidos")
-        : alert("Erro!! dados invalidos");
-      console.log("Erro");
+        ? Alert.alert("Erro", "Dados do usuario invalidos ou incorretos!!")
+        : alert("Dados do usuario invalidos ou incorretos!!");
     }
   }
   return (
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2a2a2a",
   },
   button: {
-    backgroundColor: "#6200EE",
+    backgroundColor: "#ff6600",
     paddingVertical: 12,
     borderRadius: 5,
     alignItems: "center",
