@@ -34,4 +34,8 @@
 
   `npm install @react-native-async-storage/async-storage`
 
+- **Axios**
+
+  `npm install axios`
+
 # Author: **renanrodrigues7110@gmail.com**

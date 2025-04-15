@@ -12,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const App = () => {
   // declaração das variaveis a serem utilizadas
   const [texto, setTexto] = useState("");
-  const [texts, setTexts] = useState([]);
+  const [texts, setTexts] = useState<string[]>([]);
 
   // ao montar o componente, carrega os valores salvos no storage
   useEffect(() => {
