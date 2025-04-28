@@ -14,7 +14,8 @@ export default function App() {
   const [texto, setTexto] = useState("");
   const [editando, setEditando] = useState(null);
 
-  const API_URL = "http://localhost/mobile/";
+  // const API_URL = "http://localhost/mobile/"; // <- URL com php
+  const API_URL = "http://127.0.0.1:5000/"; // <- URL com Flask
 
   const carregar = () => {
     axios.get(API_URL).then((res) => setMensagens(res.data));
@@ -26,13 +27,15 @@ export default function App() {
 
   const salvar = () => {
     if (editando) {
-      axios.put(API_URL, { id: editando, texto }).then(() => {
+      // axios.put(API_URL, { id: editando, texto }).then(() => { // <- Com PHP
+      axios.put(API_URL, { id: editando, texto: texto }).then(() => {
         setTexto("");
         setEditando(null);
         carregar();
       });
     } else {
-      axios.post(API_URL, { texto }).then(() => {
+      // axios.post(API_URL, { texto }).then(() => { // <- Com PHP
+      axios.post(API_URL, { texto: texto }).then(() => {
         setTexto("");
         carregar();
       });

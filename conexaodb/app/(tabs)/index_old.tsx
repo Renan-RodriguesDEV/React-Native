@@ -9,7 +9,8 @@ export default function App() {
   useEffect(() => {
     // faz uma requisição para o servidor
     axios
-      .get("http://localhost/mobile/index.php")
+      // .get("http://localhost/mobile/index.php") // <- URL com php
+      .get("http://127.0.0.1:5000/") // <- URL com Flask
       .then((res) => setMessages(res.data)) // então altera o estado de messages
       .catch((error) => console.log(error)); // se der erro, imprime no console
     // a função é chamada apenas uma vez, quando o componente é montado
