@@ -1,39 +1,14 @@
-import { Tabs } from "expo-router";
-import React from "react";
-import { Platform } from "react-native";
+import { Stack } from "expo-router";
 
-export default function TabLayout() {
+export default function Layout() {
   return (
-    <Tabs
+    <Stack
       screenOptions={{
-        headerShown: false,
+        headerShown: false, // Oculta o cabeçalho se desejar
       }}
     >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Index",
-        }}
-      />
-      <Tabs.Screen
-        name="login"
-        options={{
-          title: "Login",
-        }}
-      />
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: "Home",
-        }}
-      />
-      <Tabs.Screen
-        name="edit"
-        options={{
-          title: "Editar",
-          href: null, // Isso oculta a aba, mas permite navegação
-        }}
-      />
-    </Tabs>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="userscreen" />
+    </Stack>
   );
 }

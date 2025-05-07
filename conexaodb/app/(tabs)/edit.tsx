@@ -5,45 +5,43 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 
 export default function EditScreen() {
   const router = useRouter();
-  // Recebendo os parâmetros
+  // Recebendo os parâmetros e convertendo-os para string
   const params = useLocalSearchParams();
-  const id = params.id;
+  const id = params.id?.toString();
+  const nomeAtual = params.nomeAtual?.toString() || "";
+  const telefoneAtual = params.telefoneAtual?.toString() || "";
+  const emailAtual = params.emailAtual?.toString() || "";
+  const senhaAtual = params.senhaAtual?.toString() || "";
 
-  // Estados para os campos
-  const [nome, setNome] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [email, setEmail] = useState("");
+  // Inicializando os estados com os valores recebidos
+  const [nome, setNome] = useState(nomeAtual);
+  const [telefone, setTelefone] = useState(telefoneAtual);
+  const [email, setEmail] = useState(emailAtual);
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
 
-  // Use o IP correto do servidor, não localhost
-  const urlAPI = "http://192.168.198.16:5001/"; // Substitua pelo seu IP
+  // Corrigindo a URL para usar o IP real, não localhost
+  const urlAPI = "http://localhost:5001/"; // Use o IP do seu servidor
 
-  // Carregar os dados do usuário quando o componente montar
   useEffect(() => {
-    if (id) {
-      console.log("Buscando usuário com ID:", id);
-
-      // Buscar dados do usuário
+    // Só busca os dados do usuário se não tiver recebido os dados completos
+    if (id && (!nomeAtual || !telefoneAtual || !emailAtual)) {
       axios
         .get(`${urlAPI}${id}`)
         .then((res) => {
-          console.log("Dados recebidos:", res.data);
           const userData = res.data;
-
-          // Preencher os campos com os dados recebidos
-          if (userData && userData.data) {
-            setNome(userData.data.nome || "");
-            setTelefone(userData.data.telefone || "");
-            setEmail(userData.data.email || "");
-          }
+          setNome(userData.nome || "");
+          setTelefone(userData.telefone || "");
+          setEmail(userData.email || "");
+          console.log("Dados do usuário:", userData);
         })
         .catch((err) => {
-          console.error("Erro ao buscar dados:", err);
-          Alert.alert("Erro", "Não foi possível carregar os dados do usuário.");
+          console.error("Erro ao buscar dados do usuário:", err);
+          // Alert.alert("Erro", "Não foi possível carregar os dados do usuário.");
+          alert("Erro!! Não foi possível carregar os dados do usuário.");
         });
     }
-  }, [id]); // Dependência apenas no ID
+  }, [id, nomeAtual, telefoneAtual, emailAtual]);
 
   const excluirUsuario = () => {
     // Versão simplificada usando alert JavaScript padrão
@@ -57,28 +55,34 @@ export default function EditScreen() {
         })
         .catch(() => {
           alert("Não foi possível excluir o usuário");
+          // Alert.alert("Não foi possível excluir o usuário");
         });
     }
   };
   const salvarAlteracoes = () => {
     if (senha !== confirmarSenha) {
-      Alert.alert("Erro", "As senhas não coincidem!");
+      // Alert.alert("Erro", "As senhas não coincidem!");
+      alert("Erro!! As senhas não coincidem!");
       return;
+    }
+    if (senha === "") {
+      alert(`A senha se mantem: ${senhaAtual}`);
+      setSenha(senhaAtual);
     }
 
     const userData = {
       nome,
       telefone,
       email,
-      senha: senha || undefined, // Só envia a senha se for preenchida
+      senha: senha !==""? senha: senhaAtual || undefined, 
     };
 
     axios
       .put(`${urlAPI}${id.toString()}`, userData)
       .then(() => {
-        Alert.alert("Sucesso", "Usuário atualizado com sucesso", [
-          { text: "OK", onPress: () => router.back() },
-        ]);
+        // Alert.alert("Sucesso", "Usuário atualizado com sucesso", [
+        //   { text: "OK", onPress: () => router.back() },
+        // ]);
         alert("Usuário atualizado com sucesso");
         router.back();
       })
@@ -88,10 +92,12 @@ export default function EditScreen() {
           "Detalhes:",
           err.response ? JSON.stringify(err.response.data) : "Sem resposta"
         );
-        Alert.alert(
-          "Erro",
-          `Não foi possível atualizar os dados. ${err.message}`
-        );
+        // Alert.alert(
+        //   "Erro",
+        //   `Não foi possível atualizar os dados. ${err.message}`
+        // );
+        alert("Não foi possível atualizar os dados.");
+        console.error("Erro:", err.message);
       });
   };
 

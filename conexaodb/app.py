@@ -119,6 +119,7 @@ def delete(id):
 @app.route("/<int:id>", methods=["PUT"])
 def update(id):
     data = request.get_json()
+    print(f"Dados do PUT: {data}")
     nome, telefone, email, senha = (
         data["nome"],
         data["telefone"],
@@ -133,4 +134,4 @@ def update(id):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="127.0.0.1", port=5001, debug=True)

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import axios from "axios";
 import { useRouter } from "expo-router";
 export default function App() {
@@ -18,11 +18,13 @@ export default function App() {
           router.push("/(tabs)/home"); // Redireciona para a tela de home
         } else {
           alert("Email ou senha incorretos!");
+          // Alert.alert("Email ou senha incorretos!");
         }
       })
       .catch((err) => {
         console.error("Erro ao fazer login:", err);
         alert("Erro ao fazer login. 404");
+        // Alert.alert("Erro ao fazer login. 404");
       });
   };
   return (
