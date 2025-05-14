@@ -17,7 +17,7 @@ config = {
 def auth_user(email, senha):
     with pymysql.connect(**config) as conn:
         with conn.cursor() as cursor:
-            query = "SELECT email, senha FROM usuarios WHERE email = %s AND senha = %s"
+            query = "SELECT email, senha FROM usuarios_mobile WHERE email = %s AND senha = %s"
             cursor.execute(query, (email, senha))
             result = cursor.fetchone()
             print(f"Query: {query}")
@@ -29,7 +29,9 @@ def auth_user(email, senha):
 
 
 def insert_user(nome, telefone, email, senha):
-    QUERY = "insert into usuarios(nome,telefone,email,senha) values (%s,%s,%s,%s);"
+    QUERY = (
+        "insert into usuarios_mobile(nome,telefone,email,senha) values (%s,%s,%s,%s);"
+    )
     with pymysql.connect(**config) as conn:
         try:
             with conn.cursor() as cursor:
@@ -42,7 +44,7 @@ def insert_user(nome, telefone, email, senha):
 
 
 def delete_user(id):
-    QUERY = "DELETE FROM usuarios WHERE id = %s"
+    QUERY = "DELETE FROM usuarios_mobile WHERE id = %s"
     with pymysql.connect(**config) as conn:
         try:
             with conn.cursor() as cursor:
@@ -57,7 +59,7 @@ def delete_user(id):
 
 
 def update_user(id, nome, telefone, email, senha):
-    QUERY = "UPDATE usuarios SET nome = %s, telefone =%s, email = %s,senha =%s WHERE id = %s"
+    QUERY = "UPDATE usuarios_mobile SET nome = %s, telefone =%s, email = %s,senha =%s WHERE id = %s"
     with pymysql.connect(**config) as conn:
         try:
             with conn.cursor() as cursor:
@@ -87,7 +89,7 @@ def fetch_users():
     with pymysql.connect(**config) as conn:
         with conn.cursor() as cursor:
             cursor.execute(
-                "SELECT * FROM usuarios",
+                "SELECT * FROM usuarios_mobile",
             )
             result = cursor.fetchall()
             return jsonify(result), 200

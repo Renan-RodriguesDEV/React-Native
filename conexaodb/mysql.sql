@@ -35,4 +35,6 @@ email VARCHAR(255),
 senha VARCHAR(8)
 );
 
-INSERT INTO usuarios(nome,telefone,email,senha) VALUES ('Pedro','19998722472','pedro@gmail.com','1234');
+INSERT INTO usuarios(nome,telefone,email,senha) VALUES ('Pedro','19998722472','pedro@gmail.com','comsenha');
+INSERT INTO usuarios(nome,telefone,email,senha) VALUES ('Mariani','19998722472','mariani@gmail.com','semsenha');
+INSERT INTO usuarios(nome,telefone,email,senha) VALUES ('Renan','19998722472','renan@gmail.com','admin');
