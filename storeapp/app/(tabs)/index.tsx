@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Picker } from "@react-native-picker/picker";
 import { View, Text, Button, StyleSheet, Alert, TextInput } from "react-native";
 // import { Camera } from "expo-camera";
 import { useRouter } from "expo-router";
@@ -6,17 +7,23 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function App() {
   const [userEmail, setUserEmail] = useState("");
+  const [userType, setUserType] = useState("clientes");
   const [password, setPassword] = useState("");
   const urlAPI = "http://localhost:5001/";
   const router = useRouter();
 
-  async function saveUser(token) {
+  async function saveUser(token: string) {
+    // Salva o token e o email do usuário no AsyncStorage
     await AsyncStorage.setItem("user", JSON.stringify(userEmail));
     await AsyncStorage.setItem("token", JSON.stringify(token));
+    await AsyncStorage.setItem("userType", userType);
   }
   const authLogin = () => {
     axios
-      .post(`${urlAPI}/login`, { email: userEmail, password: password })
+      .post(`${urlAPI}/user/login?type_user=${userType}`, {
+        email: userEmail,
+        password: password,
+      })
       .then((response) => {
         if (response.data.message === "sucess") {
           saveUser(response.data.token);
@@ -32,6 +39,15 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
+      <Text style={{ marginBottom: 5 }}>Tipo de usuário:</Text>
+      <Picker
+        selectedValue={userType}
+        style={{ height: 50, marginBottom: 10 }}
+        onValueChange={(itemValue) => setUserType(itemValue)}
+      >
+        <Picker.Item label="Cliente" value="clientes" />
+        <Picker.Item label="Vendedor" value="vendedores" />
+      </Picker>
       <TextInput
         style={styles.input}
         placeholder="Email"
