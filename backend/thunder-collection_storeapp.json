@@ -1,0 +1,222 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "storeapp",
+    "collectionId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+    "dateExported": "2025-05-14T13:44:40.070Z",
+    "version": "1.2",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "9710bc5f-5b4e-4262-90cf-5dbdbe674c57",
+            "colId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+            "containerId": "",
+            "name": "GET produtos",
+            "url": "http://127.0.0.1:5001/product/",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2025-05-14T12:40:45.087Z",
+            "modified": "2025-05-14T12:41:03.990Z",
+            "headers": []
+        },
+        {
+            "_id": "09c2d50c-f13f-4184-8032-65f6c3ae8035",
+            "colId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+            "containerId": "",
+            "name": "GET usuarios",
+            "url": "http://127.0.0.1:5001/user?type_user=vendedores",
+            "method": "GET",
+            "sortNum": 12500,
+            "created": "2025-05-14T13:37:44.574Z",
+            "modified": "2025-05-14T13:41:20.425Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "type_user",
+                    "value": "vendedores",
+                    "isPath": false
+                }
+            ]
+        },
+        {
+            "_id": "2a22b6f3-ef99-4318-9802-85fa5fcb40c4",
+            "colId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+            "containerId": "",
+            "name": "CREATE usuario",
+            "url": "http://127.0.0.1:5001/user?type_user=clientes",
+            "method": "POST",
+            "sortNum": 15000,
+            "created": "2025-05-14T13:01:06.684Z",
+            "modified": "2025-05-14T13:25:07.581Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "type_user",
+                    "value": "clientes",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\":\"Mariani\",\n  \"password\":\"1234\",\n  \"email\":\"ma@gmail.com\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "b48af237-66f4-482d-9bed-a97aadcc2a42",
+            "colId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+            "containerId": "",
+            "name": "CREATE produto",
+            "url": "http://127.0.0.1:5001/product/",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2025-05-14T12:41:23.176Z",
+            "modified": "2025-05-14T13:00:31.526Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"price\":799.99,\n  \"count\":200,\n  \"name\":\"GTA VI\",\n  \"description\":\"Rockstar Games Technology\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "4327934b-6bab-485a-854f-cd37a671ec81",
+            "colId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+            "containerId": "",
+            "name": "GET produtos by ID",
+            "url": "http://127.0.0.1:5001/product/{id}",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2025-05-14T12:44:25.660Z",
+            "modified": "2025-05-14T12:58:09.467Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "1",
+                    "isPath": true
+                }
+            ]
+        },
+        {
+            "_id": "4e94a3f5-5f7d-44f3-85d5-621715f311f2",
+            "colId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+            "containerId": "",
+            "name": "LOGIN usuario",
+            "url": "http://127.0.0.1:5001/user/login?type_user=clientes",
+            "method": "GET",
+            "sortNum": 25000,
+            "created": "2025-05-14T13:16:48.311Z",
+            "modified": "2025-05-14T13:29:21.806Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "type_user",
+                    "value": "clientes",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"ma@gmail.com\",\n  \"password\":\"1234\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "b21ea34b-2ddf-4561-b9eb-759ad2174cbd",
+            "colId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+            "containerId": "",
+            "name": "UPDATE produto ",
+            "url": "http://127.0.0.1:5001/product/{id}",
+            "method": "PUT",
+            "sortNum": 30000,
+            "created": "2025-05-14T12:48:41.901Z",
+            "modified": "2025-05-14T12:57:50.927Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "1",
+                    "isPath": true
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"price\":2000.50,\n  \"count\":20,\n  \"name\":\"PC Gamer 2.0\",\n  \"description\":\"Produto\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "ea2d9720-8d0c-4833-8d46-818fc4b1f48f",
+            "colId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+            "containerId": "",
+            "name": "DELETE produto ",
+            "url": "http://127.0.0.1:5001/product/{id}",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2025-05-14T12:58:18.993Z",
+            "modified": "2025-05-14T12:59:10.817Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "1",
+                    "isPath": true
+                }
+            ]
+        },
+        {
+            "_id": "57b7d15c-7046-47ec-9406-1444e90e096c",
+            "colId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+            "containerId": "",
+            "name": "EDIT usuario",
+            "url": "http://127.0.0.1:5001/user/{id}?type_user=vendedores",
+            "method": "PUT",
+            "sortNum": 45000,
+            "created": "2025-05-14T13:32:44.344Z",
+            "modified": "2025-05-14T13:41:41.450Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "1",
+                    "isPath": true
+                },
+                {
+                    "name": "type_user",
+                    "value": "vendedores",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\":\"Me. Renan Imperador III\",\n  \"email\":\"renan@gmail.com\",\n  \"password\":\"1234\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "c3a8da2d-bb3b-450d-9f4d-45246033a064",
+            "colId": "fcbe5dcd-f7d9-4778-86b0-d9ce26f0cb35",
+            "containerId": "",
+            "name": "DELETE usuario ",
+            "url": "http://127.0.0.1:5001/user/{id}?type_user=vendedores",
+            "method": "DELETE",
+            "sortNum": 55000,
+            "created": "2025-05-14T13:41:55.664Z",
+            "modified": "2025-05-14T13:42:15.846Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "1",
+                    "isPath": true
+                },
+                {
+                    "name": "type_user",
+                    "value": "vendedores",
+                    "isPath": false
+                }
+            ]
+        }
+    ],
+    "ref": "wEFfhmrXd8NPx9Q2i1Ph6q066HAEKcYw44GMaMyJCf2eQP1K2i4FKLezbjex1VS645OFB17pq_oiboDZBpKh2w"
+}

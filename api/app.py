@@ -1,85 +1,139 @@
-import email
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
+import pymysql
 
 app = Flask(__name__)
 CORS(app)
+config = {
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "database": "mobile_usuarios",
+    "charset": "utf8mb4",
+    "cursorclass": pymysql.cursors.DictCursor,
+}
+
+
+def auth_user(email, senha):
+    with pymysql.connect(**config) as conn:
+        with conn.cursor() as cursor:
+            query = "SELECT email, senha FROM usuarios_mobile WHERE email = %s AND senha = %s"
+            cursor.execute(query, (email, senha))
+            result = cursor.fetchone()
+            print(f"Query: {query}")
+            print(f"Parâmetros: {email}, {senha}")
+            print(f"Resultado: {result}")
+            if result:
+                return True
+            return False
+
+
+def insert_user(nome, telefone, email, senha):
+    QUERY = (
+        "insert into usuarios_mobile(nome,telefone,email,senha) values (%s,%s,%s,%s);"
+    )
+    with pymysql.connect(**config) as conn:
+        try:
+            with conn.cursor() as cursor:
+                cursor.execute(QUERY, (nome, telefone, email, senha))
+                conn.commit()
+                return True
+        except Exception as e:
+            print(e)
+            return False
+
+
+def delete_user(id):
+    QUERY = "DELETE FROM usuarios_mobile WHERE id = %s"
+    with pymysql.connect(**config) as conn:
+        try:
+            with conn.cursor() as cursor:
+                cursor.execute(QUERY, (id,))
+                conn.commit()
+                print("usuario deletado")
+                return True
+        except Exception as e:
+            print(e)
+            print("usuario não pode ser deletado")
+            return False
+
+
+def update_user(id, nome, telefone, email, senha):
+    QUERY = "UPDATE usuarios_mobile SET nome = %s, telefone =%s, email = %s,senha =%s WHERE id = %s"
+    with pymysql.connect(**config) as conn:
+        try:
+            with conn.cursor() as cursor:
+                cursor.execute(QUERY, (nome, telefone, email, senha, id))
+                conn.commit()
+                return True
+            print("usuario atualizado")
+        except Exception as e:
+            print(e)
+            print("usuario não pode ser atualizado")
+            return False
 
 
 @app.route("/login", methods=["POST"])
-def auth_user():
-    request_data = request.get_json()
-    email = request_data.get("email")
-    password = request_data.get("password")
-    if email == "admin" and password == "admin":
-        return jsonify({"message": "sucess", "token": "1234"}), 200
-    return {"message": "usuario não autenticado"}, 401
+def login():
+    data = request.get_json()
+    email = data["email"]
+    senha = data["senha"]
+    print(email, senha)
+    if auth_user(email, senha):
+        return jsonify({"message": "sucess"}), 200
+    return jsonify({"message": "error"}), 401
 
 
 @app.route("/", methods=["GET"])
-def hello():
-    return {"message": "usuario seja bem vindo"}, 200
+def fetch_users():
+    with pymysql.connect(**config) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                "SELECT * FROM usuarios_mobile",
+            )
+            result = cursor.fetchall()
+            return jsonify(result), 200
 
 
-@app.post("/user", methods=["POST"])
-def register_user():
-    request_data = request.get_json()
-    email = request_data.get("email")
-    password = request_data.get("password")
-    name = request_data.get("name")
-    if all([email, password, name]):
-        return jsonify({"message": "sucess", "token": "1234"}), 201
-    return {"message": "Usuario não registrado"}, 401
+@app.route("/", methods=["POST"])
+def insert():
+    data = request.get_json()
+    nome, telefone, email, senha = (
+        data["nome"],
+        data["telefone"],
+        data["email"],
+        data["senha"],
+    )
+    if not nome or not telefone or not email or not senha:
+        return jsonify({"message": "error"}), 400
+    if insert(nome, telefone, email, senha):
+        return jsonify({"message": "sucess"}), 200
+    return jsonify({"message": "error"}), 400
 
 
-@app.post("/product", methods=["POST"])
-def register_product():
-    request_data = request.get_json()
-    price = request_data.get("price")
-    count = request_data.get("count")
-    name = request_data.get("name")
-    description = request_data.get("description", "")
-    if all([email, count, name, price, description]):
-        return jsonify({"message": "sucess"}), 201
-    return {"message": "Produdo não registrado"}, 401
+@app.route("/<int:id>", methods=["DELETE"])
+def delete(id):
+    if delete_user(id):
+        return jsonify({"message": "sucess"}), 200
+    return jsonify({"message": "error"}), 400
 
 
-@app.put("/product/<int:id>", methods=["PUT"])
-def update_product():
-    request_data = request.get_json()
-    price = request_data.get("price")
-    count = request_data.get("count")
-    name = request_data.get("name")
-    description = request_data.get("description", "")
-    if email or count or name or price or description:
-        return jsonify({"message": "sucess"}), 201
-    return {"message": "Produdo não pode ser atualizado"}, 401
-
-
-@app.put("/user/<int:id>", methods=["PUT"])
-def update_user():
-    request_data = request.get_json()
-    name = request_data.get("name")
-    email = request_data.get("email")
-    password = request_data.get("password")
-    if email or name or password:
-        return jsonify({"message": "sucess"}), 201
-    return {"message": "Usuario não pode ser atualizado"}, 401
-
-
-@app.delete("/product/<int:id>", methods=["POST"])
-def delete_product(id_):
-    if id_:
-        return jsonify({"message": "sucess"}), 201
-    return {"message": "Produdo não pode ser deletado"}, 401
-
-
-@app.delete("/user/<int:id>", methods=["POST"])
-def delete_user(id_):
-    if id_:
-        return jsonify({"message": "sucess"}), 201
-    return {"message": "Usuario não pode ser deletado"}, 401
+@app.route("/<int:id>", methods=["PUT"])
+def update(id):
+    data = request.get_json()
+    print(f"Dados do PUT: {data}")
+    nome, telefone, email, senha = (
+        data["nome"],
+        data["telefone"],
+        data["email"],
+        data["senha"],
+    )
+    if not nome or not telefone or not email or not senha:
+        return jsonify({"message": "error"}), 400
+    if update_user(id, nome, telefone, email, senha):
+        return jsonify({"message": "sucess"}), 200
+    return jsonify({"message": "error"}), 400
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(host="127.0.0.1", port=5001, debug=True)
