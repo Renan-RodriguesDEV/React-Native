@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, TextInput, Button, Text, StyleSheet } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function EditProduct() {
   const router = useRouter();
@@ -12,6 +13,12 @@ export default function EditProduct() {
   const [descricao, setDescricao] = useState("");
 
   useEffect(() => {
+    // Verifica se o usuário está logado
+    AsyncStorage.getItem("token").then((token) => {
+      if (!token) {
+        router.replace("/");
+      }
+    });
     // Buscar dados do produto pelo id
     axios.get(`http://localhost:5001/product/${id}`).then((res) => {
       const prod = res.data.product;

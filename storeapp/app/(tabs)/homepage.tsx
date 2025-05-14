@@ -17,30 +17,50 @@ type Product = {
   quantidade: number;
   descricao: string;
 };
+type Usuario = {
+  id: number;
+  nome: string;
+  senha: string;
+  email: string;
+};
 
 export default function App() {
   const [products, setProducts] = useState<Product[]>([]);
   const router = useRouter();
   const [userType, setUserType] = useState<string | null>(null);
-
+  const [id, setId] = useState<number>(0);
   useEffect(() => {
-    AsyncStorage.getItem("token").then((token) => {
+    const loadData = async () => {
+      const token = await AsyncStorage.getItem("token");
       if (!token) {
         router.replace("/");
+        return;
       }
-    });
-    axios.get("http://localhost:5001/product").then((response) => {
-      setProducts(response.data.products);
-    });
-    AsyncStorage.getItem("userType").then((value) => {
-      setUserType(value ? value.replace(/"/g, "") : null);
-      // alert(`User type: ${value}`);
-    });
+      const userTypeValue = await AsyncStorage.getItem("userType");
+      setUserType(userTypeValue ? userTypeValue.replace(/"/g, "") : null);
+
+      const idValue = await AsyncStorage.getItem("id");
+      setId(idValue ? parseInt(idValue) : 0);
+
+      try {
+        const response = await axios.get("http://localhost:5001/product");
+        setProducts(response.data.products);
+      } catch (err) {
+        alert("Erro ao carregar produtos");
+      }
+    };
+    loadData();
   }, []);
 
-  function handleEdit(id: number) {
+  function handleEditProduct(id: number) {
     router.push({
       pathname: "/(tabs)/edit_product",
+      params: { id: id.toString() },
+    });
+  }
+  function handleEditUser(id: number) {
+    router.push({
+      pathname: "/(tabs)/edit_user",
       params: { id: id.toString() },
     });
   }
@@ -61,6 +81,17 @@ export default function App() {
           </TouchableOpacity>
         </View>
       ) : null}
+      <View style={styles.headerRow}>
+        <Text style={styles.title}>Usuario</Text>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            handleEditUser(id);
+          }}
+        >
+          <Text style={styles.addButtonText}>+ Editar Perfil</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={products}
         keyExtractor={(item) => item.id.toString()}
@@ -76,7 +107,7 @@ export default function App() {
             {userType === "vendedores" ? (
               <TouchableOpacity
                 style={styles.editButton}
-                onPress={() => handleEdit(item.id)}
+                onPress={() => handleEditProduct(item.id)}
               >
                 <Text style={styles.buttonText}>Editar</Text>
               </TouchableOpacity>

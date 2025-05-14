@@ -14,6 +14,15 @@ def get_connection():
     return pymysql.connect(**config)
 
 
+def get_user(id, type_user: Literal["clientes", "vendedores"]):
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            query = f"SELECT * FROM {type_user} WHERE id = %s"
+            cursor.execute(query, (id,))
+            result = cursor.fetchone()
+            return result
+
+
 def get_users(type_user: Literal["clientes", "vendedores"]):
     with get_connection() as conn:
         with conn.cursor() as cursor:
@@ -31,9 +40,9 @@ def login(email, password, type_user: Literal["clientes", "vendedores"]):
             result = cursor.fetchone()
             if result:
                 print(f"usuario {email} autenticado")
-                return True
+                return result["id"]
             print("usuario nao autenticado")
-            return False
+            return 0
 
 
 def register_user(name, email, password, type_user: Literal["clientes", "vendedores"]):
@@ -44,12 +53,12 @@ def register_user(name, email, password, type_user: Literal["clientes", "vendedo
                 cursor.execute(query, (name, email, password))
                 conn.commit()
                 print(f"usuario {email} - {name} registrado")
-                return True
+                return cursor.lastrowid
             except Exception as e:
                 print(e)
                 conn.rollback()
                 print("usuario nao pode ser registrado")
-                return False
+                return 0
 
 
 def update_user(

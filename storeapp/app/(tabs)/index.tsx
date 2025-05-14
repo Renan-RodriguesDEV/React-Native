@@ -12,11 +12,12 @@ export default function App() {
   const urlAPI = "http://localhost:5001/";
   const router = useRouter();
 
-  async function saveUser(token: string) {
+  async function saveUser(token: string, id: number) {
     // Salva o token e o email do usuário no AsyncStorage
     await AsyncStorage.setItem("user", JSON.stringify(userEmail));
     await AsyncStorage.setItem("token", JSON.stringify(token));
     await AsyncStorage.setItem("userType", userType);
+    await AsyncStorage.setItem("id", JSON.stringify(id));
   }
   const authLogin = () => {
     axios
@@ -26,7 +27,7 @@ export default function App() {
       })
       .then((response) => {
         if (response.data.message === "sucess") {
-          saveUser(response.data.token);
+          saveUser(response.data.token, response.data.id);
           router.push("/(tabs)/homepage");
         }
       })
@@ -62,6 +63,10 @@ export default function App() {
         secureTextEntry={true}
       />
       <Button title="Entrar" onPress={() => authLogin()} />
+      <Button
+        title="Registrar-se"
+        onPress={() => router.push("/(tabs)/register_user")}
+      />
     </View>
   );
 }

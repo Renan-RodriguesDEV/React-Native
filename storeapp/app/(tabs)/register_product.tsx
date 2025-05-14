@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, Button, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function RegisterProduct() {
   const router = useRouter();
@@ -11,6 +12,12 @@ export default function RegisterProduct() {
   const [descricao, setDescricao] = useState("");
 
   function handleSave() {
+    // Verifica se o usuário está logado
+    AsyncStorage.getItem("token").then((token) => {
+      if (!token) {
+        router.replace("/");
+      }
+    });
     axios
       .post("http://localhost:5001/product/", {
         name: nome,

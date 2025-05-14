@@ -1,5 +1,12 @@
 from flask import Blueprint, jsonify, request
-from db_actions import register_user, login, update_user, delete_user, get_users
+from db_actions import (
+    get_user,
+    register_user,
+    login,
+    update_user,
+    delete_user,
+    get_users,
+)
 from token_gen import token_gen
 
 users_bp = Blueprint("user", __name__)
@@ -13,8 +20,12 @@ def create():
     name = request_data.get("name")
     type_user = request.args.get("type_user")
     if all([email, password, name]):
-        if register_user(name, email, password, type_user):
-            return jsonify({"message": "sucess", "token": token_gen()}), 201
+        user_id = register_user(name, email, password, type_user)
+        if user_id:
+            return (
+                jsonify({"message": "sucess", "token": token_gen(), "id": user_id}),
+                201,
+            )
     return {"message": "Usuario não registrado"}, 401
 
 
@@ -48,6 +59,14 @@ def get_all_users():
     return {"message": "Tipo de usuario não informado"}, 401
 
 
+@users_bp.route("/<int:id>", methods=["GET"])
+def get_user_by_id(id):
+    type_user = request.args.get("type_user")
+    if type_user:
+        return jsonify({"user": get_user(id, type_user)}), 200
+    return {"message": "Tipo de usuario não informado"}, 401
+
+
 @users_bp.route("/login", methods=["POST"])
 def auth_user():
     request_data = request.get_json()
@@ -55,6 +74,10 @@ def auth_user():
     password = request_data.get("password")
     type_user = request.args.get("type_user")
     if all([email, password, type_user]):
-        if login(email, password, type_user):
-            return jsonify({"message": "sucess", "token": token_gen()}), 200
+        user_id = login(email, password, type_user)
+        if user_id:
+            return (
+                jsonify({"message": "sucess", "token": token_gen(), "id": user_id}),
+                200,
+            )
     return {"message": "usuario não autenticado"}, 401
