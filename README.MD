@@ -38,4 +38,12 @@
 
   `npm install axios`
 
+- **Expo Camera**
+
+  `npx expo install expo-camera`
+
+- **Expo Location**
+
+  `npx expo install expo-location`
+
 # Author: **renanrodrigues7110@gmail.com**
