@@ -97,8 +97,17 @@ def delete_user(id_, type_user: Literal["clientes", "vendedores"]):
 def get_products():
     with get_connection() as conn:
         with conn.cursor() as cursor:
-            query = "SELECT * FROM produtos"
+            query = "SELECT * FROM produtos "
             cursor.execute(query)
+            result = cursor.fetchall()
+            return result
+
+
+def get_products_by_seller(fk_seller):
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            query = "SELECT * FROM produtos WHERE fk_vendedor = %s"
+            cursor.execute(query, (fk_seller,))
             result = cursor.fetchall()
             return result
 
@@ -112,12 +121,12 @@ def get_product(id_):
             return result
 
 
-def register_product(name, price, count, description):
+def register_product(name, price, count, description, fk_seller):
     with get_connection() as conn:
         with conn.cursor() as cursor:
             try:
-                query = "INSERT INTO produtos (nome,preco,quantidade,descricao) VALUES (%s,%s,%s,%s)"
-                cursor.execute(query, (name, price, count, description))
+                query = "INSERT INTO produtos (nome,preco,quantidade,descricao,fk_vendedor) VALUES (%s,%s,%s,%s,%s)"
+                cursor.execute(query, (name, price, count, description, fk_seller))
                 conn.commit()
                 print(f"produto {name} registrado")
                 return True
@@ -174,3 +183,17 @@ def register_buy(fk_product, fk_user, count):
                 conn.rollback()
                 print("compra nao pode ser registrada")
                 return False
+
+
+def get_buys(fk_user):
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+
+            query = """SELECT c.id,c.data_compra,c.quantidade,
+            c.fk_usuario,c.fk_produto, 
+            p.nome,p.preco,p.quantidade as p_quantidade,p.descricao,p.fk_vendedor,p.id as p_id
+            FROM compras c JOIN produtos p
+            ON c.fk_produto = p.id  WHERE fk_usuario = %s"""
+            cursor.execute(query, (fk_user,))
+            result = cursor.fetchall()
+            return result

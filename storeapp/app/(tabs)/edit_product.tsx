@@ -3,7 +3,7 @@ import { View, TextInput, Button, Text, StyleSheet } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import BackButton from "@/components/BackButton";
 export default function EditProduct() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
@@ -85,6 +85,7 @@ export default function EditProduct() {
       />
       <Button title="Salvar" onPress={handleSave} />
       <Button title="Excluir" onPress={handleRemove} />
+      <BackButton />
     </View>
   );
 }

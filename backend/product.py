@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from db_actions import (
-    register_buy,
+    get_products_by_seller,
     register_product,
     update_product,
     delete_product,
@@ -16,6 +16,11 @@ def get_all_products():
     return jsonify({"products": get_products()}), 200
 
 
+@product_bp.route("/seller/<int:fk_seller>", methods=["GET"])
+def get_all_products_by_seller(fk_seller):
+    return jsonify({"products": get_products_by_seller(fk_seller)}), 200
+
+
 @product_bp.route("/<int:id>", methods=["GET"])
 def get_product_by_id(id):
     print(id)
@@ -29,8 +34,9 @@ def create():
     count = request_data.get("count")
     name = request_data.get("name")
     description = request_data.get("description", "")
-    if all([count, name, price, description]):
-        if register_product(name, price, count, description):
+    fk_seller = request_data.get("fk_seller", "")
+    if all([count, name, price, description, fk_seller]):
+        if register_product(name, price, count, description, fk_seller):
             return jsonify({"message": "sucess"}), 201
     return {"message": "Produdo não registrado"}, 401
 
@@ -54,15 +60,3 @@ def remove(id):
         if delete_product(id):
             return jsonify({"message": "sucess"}), 201
     return {"message": "Produdo não pode ser deletado"}, 401
-
-
-@product_bp.route("/buy", methods=["POST"])
-def buy():
-    request_data = request.get_json()
-    fk_produto = request_data.get("fk_produto")
-    fk_usuario = request_data.get("fk_usuario")
-    count = request_data.get("count")
-    if all([fk_produto, fk_usuario, count]):
-        if register_buy(fk_produto, fk_usuario, count):
-            return jsonify({"message": "sucess"}), 201
-    return {"message": "Compra não registrada"}, 401

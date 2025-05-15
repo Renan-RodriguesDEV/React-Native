@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Picker } from "@react-native-picker/picker";
+import BackButton from "@/components/BackButton";
 
 export default function RegisterProduct() {
   const router = useRouter();
@@ -67,6 +68,7 @@ export default function RegisterProduct() {
         secureTextEntry={true}
       />
       <Button title="Salvar" onPress={handleSave} />
+      <BackButton />
     </View>
   );
 }

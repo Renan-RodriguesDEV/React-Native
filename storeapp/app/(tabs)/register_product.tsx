@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, TextInput, Button, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BackButton from "@/components/BackButton";
 
 export default function RegisterProduct() {
   const router = useRouter();
@@ -10,7 +11,15 @@ export default function RegisterProduct() {
   const [preco, setPreco] = useState("");
   const [quantidade, setQuantidade] = useState("");
   const [descricao, setDescricao] = useState("");
+  const [id, setId] = useState(0);
 
+  useEffect(() => {
+    const loadData = async () => {
+      const idValue = await AsyncStorage.getItem("id");
+      setId(idValue ? parseInt(idValue) : 0);
+    };
+    loadData();
+  });
   function handleSave() {
     // Verifica se o usuário está logado
     AsyncStorage.getItem("token").then((token) => {
@@ -24,6 +33,7 @@ export default function RegisterProduct() {
         price: parseFloat(preco.replace(",", ".")),
         count: parseInt(quantidade),
         description: descricao,
+        fk_seller: id,
       })
       .then((response) => {
         if (response.data.message === "sucess") {
@@ -61,6 +71,7 @@ export default function RegisterProduct() {
         onChangeText={setDescricao}
       />
       <Button title="Salvar" onPress={handleSave} />
+      <BackButton />
     </View>
   );
 }

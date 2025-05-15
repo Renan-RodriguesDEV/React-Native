@@ -16,12 +16,7 @@ type Product = {
   preco: number;
   quantidade: number;
   descricao: string;
-};
-type Usuario = {
-  id: number;
-  nome: string;
-  senha: string;
-  email: string;
+  fk_vendedor: number;
 };
 
 export default function App() {
@@ -43,7 +38,13 @@ export default function App() {
       setId(idValue ? parseInt(idValue) : 0);
 
       try {
-        const response = await axios.get("http://localhost:5001/product");
+        const response =
+          userTypeValue === "clientes"
+            ? await axios.get("http://localhost:5001/product")
+            : await axios.get(
+                `http://localhost:5001/product/seller/${idValue}`
+              );
+
         setProducts(response.data.products);
       } catch (err) {
         alert("Erro ao carregar produtos");
@@ -52,6 +53,12 @@ export default function App() {
     loadData();
   }, []);
 
+  function logout() {
+    AsyncStorage.removeItem("token");
+    AsyncStorage.removeItem("userType");
+    AsyncStorage.removeItem("id");
+    router.replace("/");
+  }
   function handleEditProduct(id: number) {
     router.push({
       pathname: "/(tabs)/edit_product",
@@ -70,6 +77,12 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        style={[styles.addButton, { alignSelf: "flex-end", marginBottom: 16 }]}
+        onPress={logout}
+      >
+        <Text style={styles.addButtonText}>Logout</Text>
+      </TouchableOpacity>
       {userType === "vendedores" ? (
         <View style={styles.headerRow}>
           <Text style={styles.title}>Produtos</Text>
@@ -92,6 +105,19 @@ export default function App() {
           <Text style={styles.addButtonText}>+ Editar Perfil</Text>
         </TouchableOpacity>
       </View>
+      {userType === "clientes" ? (
+        <View style={styles.headerRow}>
+          <Text style={styles.title}>Ver Minhas Compras</Text>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => {
+              router.push("/(tabs)/my_purchases");
+            }}
+          >
+            <Text style={styles.addButtonText}>+ Minhas Compras</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
       <FlatList
         data={products}
         keyExtractor={(item) => item.id.toString()}

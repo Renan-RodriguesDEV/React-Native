@@ -33,6 +33,7 @@ export default function App() {
       })
       .catch((error) => {
         console.log(error);
+        alert("Erro ao fazer login Credenciais invalidas");
         Alert.alert("Erro ao fazer login", "Credenciais invalidas");
       });
   };
