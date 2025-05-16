@@ -121,12 +121,20 @@ def get_product(id_):
             return result
 
 
-def register_product(name, price, count, description, fk_seller):
+def register_product(name, price, count, description, fk_seller, image=None):
     with get_connection() as conn:
         with conn.cursor() as cursor:
             try:
-                query = "INSERT INTO produtos (nome,preco,quantidade,descricao,fk_vendedor) VALUES (%s,%s,%s,%s,%s)"
-                cursor.execute(query, (name, price, count, description, fk_seller))
+                if image is not None:
+                    print("com imagem")
+                    query = "INSERT INTO produtos (nome,preco,quantidade,descricao,fk_vendedor,imagem) VALUES (%s,%s,%s,%s,%s,%s)"
+                    cursor.execute(
+                        query, (name, price, count, description, fk_seller, image)
+                    )
+                else:
+                    print("sem imagem")
+                    query = "INSERT INTO produtos (nome,preco,quantidade,descricao,fk_vendedor) VALUES (%s,%s,%s,%s,%s)"
+                    cursor.execute(query, (name, price, count, description, fk_seller))
                 conn.commit()
                 print(f"produto {name} registrado")
                 return True
@@ -137,12 +145,18 @@ def register_product(name, price, count, description, fk_seller):
                 return False
 
 
-def update_product(id_, name, price, count, description):
+def update_product(id_, name, price, count, description, image=None):
     with get_connection() as conn:
         with conn.cursor() as cursor:
             try:
-                query = "UPDATE produtos SET nome =%s,preco=%s,quantidade=%s,descricao=%s WHERE id = %s"
-                cursor.execute(query, (name, price, count, description, id_))
+                if image is not None:
+                    print("com imagem")
+                    query = "UPDATE produtos SET nome =%s,preco=%s,quantidade=%s,descricao=%s,imagem=%s WHERE id = %s"
+                    cursor.execute(query, (name, price, count, description, image, id_))
+                else:
+                    print("sem imagem")
+                    query = "UPDATE produtos SET nome =%s,preco=%s,quantidade=%s,descricao=%s WHERE id = %s"
+                    cursor.execute(query, (name, price, count, description, id_))
                 conn.commit()
                 print(f"produto {name} atualizado")
                 return True

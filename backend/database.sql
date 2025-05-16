@@ -15,8 +15,9 @@ create table produtos (
     preco decimal(10, 2) default 0.00,
     quantidade int default 0,
     descricao text,
+    imagem BLOB,
     fk_vendedor int not null,
-    foreign key(fk_vendedor) references vendedores(id)
+    foreign key (fk_vendedor) references vendedores (id)
 );
 
 create table compras (
@@ -24,9 +25,8 @@ create table compras (
     fk_usuario int not null,
     fk_produto int not null,
     quantidade int not null,
-    data_compra datetime default current_timestamp
-    foreign key(fk_usuario) references clientes(id),
-    foreign key(fk_produto) references produtos(id)
+    data_compra datetime default current_timestamp foreign key (fk_usuario) references clientes (id),
+    foreign key (fk_produto) references produtos (id)
 );
 
 create table vendedores (

@@ -6,6 +6,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,6 +17,7 @@ type Product = {
   preco: number;
   quantidade: number;
   descricao: string;
+  imagem: string | null;
   fk_vendedor: number;
 };
 
@@ -130,6 +132,14 @@ export default function App() {
             <Text style={styles.productInfo}>
               Quantidade: {item.quantidade}
             </Text>
+            {/* Mostra a imagem se existir */}
+            {item.imagem && (
+              <Image
+                source={{ uri: `data:image/jpeg;base64,${item.imagem}` }}
+                style={{ width: 100, height: 100, marginTop: 10 }}
+              />
+            )}
+            {/* Botões de editar ou comprar */}
             {userType === "vendedores" ? (
               <TouchableOpacity
                 style={styles.editButton}
