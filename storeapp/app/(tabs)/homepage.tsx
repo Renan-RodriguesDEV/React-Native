@@ -26,6 +26,7 @@ export default function App() {
   const router = useRouter();
   const [userType, setUserType] = useState<string | null>(null);
   const [id, setId] = useState<number>(0);
+  const urlAPI = 'http://192.168.1.18:5001'
   useEffect(() => {
     const loadData = async () => {
       const token = await AsyncStorage.getItem("token");
@@ -42,9 +43,9 @@ export default function App() {
       try {
         const response =
           userTypeValue === "clientes"
-            ? await axios.get("http://localhost:5001/product")
+            ? await axios.get(`${urlAPI}/product`)
             : await axios.get(
-                `http://localhost:5001/product/seller/${idValue}`
+                `${urlAPI}/product/seller/${idValue}`
               );
 
         setProducts(response.data.products);

@@ -13,7 +13,7 @@ export default function RegisterProduct() {
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("clientes");
   const [id, setId] = useState(0);
-
+  const urlAPI = "http://192.168.1.18:5001";
   function saveUser(token: string, id: number) {
     // Salva o token e o email do usuário no AsyncStorage
     AsyncStorage.setItem("user", JSON.stringify(email));
@@ -29,7 +29,7 @@ export default function RegisterProduct() {
       }
     });
     axios
-      .post(`http://localhost:5001/user/?type_user=${userType}`, {
+      .post(`${urlAPI}/user/?type_user=${userType}`, {
         name: nome,
         email: email,
         password: password,

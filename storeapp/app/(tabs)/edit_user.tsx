@@ -12,7 +12,7 @@ export default function EditUser() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("");
-
+  const urlAPI = "http://192.168.1.18:5001";
   useEffect(() => {
     // Função assíncrona para carregar dados
     const fetchData = async () => {
@@ -29,7 +29,7 @@ export default function EditUser() {
       try {
         // Agora userTypeValue está garantido
         const res = await axios.get(
-          `http://localhost:5001/user/${id}?type_user=${userTypeValue}`
+          `${urlAPI}/user/${id}?type_user=${userTypeValue}`
         );
         const userData = res.data.user;
         setNome(userData.nome);
@@ -46,7 +46,7 @@ export default function EditUser() {
 
   function handleSave() {
     axios
-      .put(`http://localhost:5001/user/${id}?type_user=${userType}`, {
+      .put(`${urlAPI}/user/${id}?type_user=${userType}`, {
         name: nome,
         password: password,
         email: email,
@@ -63,7 +63,7 @@ export default function EditUser() {
   }
   function handleRemove() {
     axios
-      .delete(`http://localhost:5001/user/${id}?type_user=${userType}`)
+      .delete(`${urlAPI}/user/${id}?type_user=${userType}`)
       .then((response) => {
         if (response.data.message === "sucess") {
           alert("Usuario deletado com sucesso");

@@ -18,7 +18,7 @@ export default function EditProduct() {
   const [showCamera, setShowCamera] = useState(false);
   const [temPermissao, setTemPermissao] = useState<boolean | null>(null);
   const cameraRef = useRef<typeof Camera | null>(null);
-
+  const urlAPI = "http://192.168.1.18:5001";
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -32,7 +32,7 @@ export default function EditProduct() {
         router.replace("/");
       }
     });
-    axios.get(`http://localhost:5001/product/${id}`).then((res) => {
+    axios.get(`${urlAPI}/product/${id}`).then((res) => {
       const prod = res.data.product;
       setNome(prod.nome);
       setPreco(String(prod.preco));
@@ -67,17 +67,23 @@ export default function EditProduct() {
     formData.append("price", String(Number(preco)));
     formData.append("count", String(Number(quantidade)));
     formData.append("description", descricao);
-    if (imagem && imagem.startsWith("file://")) {
-      alert(`temos imagem ${imagem}`);
-      console.log(imagem);
-      formData.append("image", {
-        uri: imagem,
-        name: "produto.jpg",
-        type: "image/jpeg",
-      } as any);
+    if (
+      imagem &&
+      (imagem.startsWith("file://") || imagem.startsWith("data:image"))
+    ) {
+      // alert(`temos imagem ${imagem}`);
+      if (imagem.startsWith("file://")) {
+        formData.append("image", {
+          uri: imagem,
+          name: "produto.jpg",
+          type: "image/jpeg",
+        } as any);
+      } else {
+        formData.append("image", imagem);
+      }
     }
     axios
-      .put(`http://localhost:5001/product/${id}`, formData, {
+      .put(`${urlAPI}/product/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((response) => {
@@ -92,7 +98,7 @@ export default function EditProduct() {
   }
 
   function handleRemove() {
-    axios.delete(`http://localhost:5001/product/${id}`).then((response) => {
+    axios.delete(`${urlAPI}/product/${id}`).then((response) => {
       if (response.data.message === "sucess") {
         alert("Produto deletado com sucesso");
         router.replace("/(tabs)/homepage");

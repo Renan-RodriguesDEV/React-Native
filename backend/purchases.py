@@ -1,8 +1,15 @@
+import base64
 from flask import Blueprint, jsonify, request
 
 from db_actions import get_buys, register_buy
 
 purchase_bp = Blueprint("buy", __name__)
+
+
+def serialize_product(product):
+    if isinstance(product["imagem"], bytes):
+        product["imagem"] = base64.b64encode(product["imagem"]).decode()
+    return product
 
 
 @purchase_bp.route("/", methods=["POST"])
@@ -22,4 +29,5 @@ def get_all_buys(fk_user):
     buys = get_buys(fk_user)
     if not buys:
         return jsonify({"message": "Nenhuma compra encontrada"}), 404
+    buys = [serialize_product(buy) for buy in buys]
     return jsonify({"buys": buys}), 200

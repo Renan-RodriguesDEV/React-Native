@@ -55,14 +55,24 @@ def create():
         description = request_data.get("description", "")
         image = request_data.get("image")
     else:
+        print(request.form)
         price = request.form.get("price")
         count = request.form.get("count")
         name = request.form.get("name")
         description = request.form.get("description", "")
         fk_seller = request.form.get("fk_seller", "")
         image_file = request.files.get("image")
-        image = image_file.read() if image_file else None
-    if all([count, name, price, description, fk_seller]):
+        if image_file:
+            image = image_file.read()
+        else:
+            image_base64 = request.form.get("image")
+            if image_base64 and image_base64.startswith("data:image"):
+                # Extrai apenas a parte base64
+                header, encoded = image_base64.split(",", 1)
+                image = base64.b64decode(encoded)
+            else:
+                image = None
+    if all([count, name, price, fk_seller]):
         if register_product(name, price, count, description, fk_seller, image):
             return jsonify({"message": "sucess"}), 201
     return {"message": "Produdo não registrado"}, 401
@@ -78,13 +88,22 @@ def update(id):
         description = request_data.get("description", "")
         image = None
     else:
-        image = request.form.get("image")
+        print(request.form)
         price = request.form.get("price")
         count = request.form.get("count")
         name = request.form.get("name")
         description = request.form.get("description", "")
         image_file = request.files.get("image")
-        image = image_file.read() if image_file else None
+        if image_file:
+            image = image_file.read()
+        else:
+            image_base64 = request.form.get("image")
+            if image_base64 and image_base64.startswith("data:image"):
+                # Extrai apenas a parte base64
+                header, encoded = image_base64.split(",", 1)
+                image = base64.b64decode(encoded)
+            else:
+                image = None
     if count or name or price or description:
         if update_product(id, name, price, count, description, image):
             return jsonify({"message": "sucess"}), 201

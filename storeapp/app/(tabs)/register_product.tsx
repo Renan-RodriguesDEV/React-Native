@@ -22,7 +22,7 @@ export default function RegisterProduct() {
   const [quantidade, setQuantidade] = useState("");
   const [descricao, setDescricao] = useState("");
   const [id, setId] = useState(0);
-
+  const urlAPI = "http://192.168.1.18:5001";
   // Câmera
   const [temPermissao, setTemPermissao] = useState<boolean | null>(null);
   const [foto, setFoto] = useState<string | null>(null);
@@ -71,21 +71,27 @@ export default function RegisterProduct() {
     }
     const formData = new FormData();
     formData.append("name", nome);
-    formData.append("price", parseFloat(preco.replace(",", ".")));
-    formData.append("count", parseInt(quantidade));
+    formData.append("price", parseFloat(preco.replace(",", ".")).toString());
+    formData.append("count", parseInt(quantidade).toString());
     formData.append("description", descricao);
-    formData.append("fk_seller", id);
-
-    if (foto) {
-      formData.append("image", {
-        uri: foto,
-        name: "produto.jpg",
-        type: "image/jpeg",
-      } as any);
+    formData.append("fk_seller", id.toString());
+    if (foto && (foto.startsWith("file://") || foto.startsWith("data:image"))) {
+      alert("enviando o " + foto);
+      if (foto.startsWith("file://")) {
+        alert("enviando o file");
+        formData.append("image", {
+          uri: foto,
+          name: "produto.jpg",
+          type: "image/jpeg",
+        } as any);
+      } else {
+        alert("enviando o base64");
+        formData.append("image", foto);
+      }
     }
 
     axios
-      .post("http://localhost:5001/product/", formData, {
+      .post(`${urlAPI}/product/`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((response) => {

@@ -205,7 +205,7 @@ def get_buys(fk_user):
 
             query = """SELECT c.id,c.data_compra,c.quantidade,
             c.fk_usuario,c.fk_produto, 
-            p.nome,p.preco,p.quantidade as p_quantidade,p.descricao,p.fk_vendedor,p.id as p_id
+            p.nome,p.preco,p.quantidade as p_quantidade,p.descricao,p.fk_vendedor,p.id as p_id, p.imagem
             FROM compras c JOIN produtos p
             ON c.fk_produto = p.id  WHERE fk_usuario = %s"""
             cursor.execute(query, (fk_user,))
