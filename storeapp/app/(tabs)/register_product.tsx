@@ -22,7 +22,7 @@ export default function RegisterProduct() {
   const [quantidade, setQuantidade] = useState("");
   const [descricao, setDescricao] = useState("");
   const [id, setId] = useState(0);
-  const urlAPI = "http://192.168.1.18:5001";
+  const urlAPI = "http://192.168.1.9:5001";
   // Câmera
   const [temPermissao, setTemPermissao] = useState<boolean | null>(null);
   const [foto, setFoto] = useState<string | null>(null);

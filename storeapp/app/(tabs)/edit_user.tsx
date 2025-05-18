@@ -12,7 +12,7 @@ export default function EditUser() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("");
-  const urlAPI = "http://192.168.1.18:5001";
+  const urlAPI = "http://192.168.1.9:5001";
   useEffect(() => {
     // Função assíncrona para carregar dados
     const fetchData = async () => {

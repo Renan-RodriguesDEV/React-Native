@@ -32,7 +32,7 @@ const { width } = Dimensions.get("window");
 export default function MyPurchasesScreen() {
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
-  const urlAPI = "http://192.168.1.18:5001";
+  const urlAPI = "http://192.168.1.9:5001";
 
   useEffect(() => {
     const fetchPurchases = async () => {

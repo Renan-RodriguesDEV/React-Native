@@ -18,7 +18,7 @@ export default function EditProduct() {
   const [showCamera, setShowCamera] = useState(false);
   const [temPermissao, setTemPermissao] = useState<boolean | null>(null);
   const cameraRef = useRef<typeof Camera | null>(null);
-  const urlAPI = "http://192.168.1.18:5001";
+  const urlAPI = "http://192.168.1.9:5001";
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();

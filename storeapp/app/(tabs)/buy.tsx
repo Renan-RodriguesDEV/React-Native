@@ -24,7 +24,7 @@ export default function BuyScreen() {
   const [quantity, setQuantity] = useState("1");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState(0);
-  const urlAPI = "http://192.168.1.18:5001";
+  const urlAPI = "http://192.168.1.9:5001";
 
   useEffect(() => {
     AsyncStorage.getItem("id").then((idValue) => {

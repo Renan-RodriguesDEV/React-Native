@@ -9,7 +9,7 @@ export default function App() {
   const [userEmail, setUserEmail] = useState("");
   const [userType, setUserType] = useState("clientes");
   const [password, setPassword] = useState("");
-  const urlAPI = "http://192.168.1.18:5001/";
+  const urlAPI = "http://192.168.1.9:5001/";
   const router = useRouter();
   async function saveUser(token: string, id: number) {
     // Salva o token e o email do usuário no AsyncStorage
